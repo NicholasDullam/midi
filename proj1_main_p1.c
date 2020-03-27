@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <unistd.h>
+#include <getopt.h>
 
 #include "parser.h"
 #include "library.h"
@@ -25,6 +26,10 @@
 " writing it back to ./new_reflect.mid\n"\
 
 int main(int argc, char **argv) {
+  setvbuf(stdout, NULL, _IONBF, 0);
+  setvbuf(stderr, NULL, _IONBF, 0);
+  setvbuf(stdin, NULL, _IONBF, 0);
+  
   if (argc == 1) {
     printf(USAGE);
     return -1;
