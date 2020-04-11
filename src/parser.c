@@ -24,7 +24,6 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
   char type[4] = "";
   uint32_t length = 0;
   uint8_t length_buffer[4] = {0};
-  uint8_t format = 0;
 
   assert(fp != NULL);
   fread(type, 4, 1, fp);
