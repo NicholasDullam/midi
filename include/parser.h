@@ -18,15 +18,15 @@
 #define META_EVENT (0xFF)
 
 //  Forward declarations
-typedef struct division division_t;
-typedef struct track track_t;
-typedef struct event event_t;
-typedef struct track_node track_node_t;
-typedef struct event_node event_node_t;
-typedef struct song_data song_data_t;
+typedef struct division_s division_t;
+typedef struct track_s track_t;
+typedef struct event_s event_t;
+typedef struct track_node_s track_node_t;
+typedef struct event_node_s event_node_t;
+typedef struct song_data_s song_data_t;
 
 //  MIDI Structures
-typedef struct division {
+typedef struct division_s {
   bool uses_tpq;
   union {
     //  If uses_tpq == true
@@ -39,12 +39,12 @@ typedef struct division {
   };
 } division_t;
 
-typedef struct track {
+typedef struct track_s {
   uint32_t length;
   event_node_t *event_list;
 } track_t;
 
-typedef struct event {
+typedef struct event_s {
   uint32_t delta_time;
   uint8_t type;
   union {
@@ -55,17 +55,17 @@ typedef struct event {
 } event_t;
 
 //  Internal structures
-typedef struct track_node {
-  struct track_node *next_track;
+typedef struct track_node_s {
+  struct track_node_s *next_track;
   track_t *track;
 } track_node_t;
 
-typedef struct event_node {
-  struct event_node *next_event;
+typedef struct event_node_s {
+  struct event_node_s *next_event;
   event_t *event;
 } event_node_t;
 
-typedef struct song_data {
+typedef struct song_data_s {
   //  Relative path to MIDI file
   char *path;
 

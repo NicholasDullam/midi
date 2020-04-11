@@ -9,12 +9,12 @@
 #define SONG_NOT_FOUND (-1)
 #define DELETE_SUCCESS (0)
 
-typedef struct tree_node {
+typedef struct tree_node_s {
   char *song_name;
   song_data_t *song;
 
-  struct tree_node *left_child;
-  struct tree_node *right_child;
+  struct tree_node_s *left_child;
+  struct tree_node_s *right_child;
 } tree_node_t;
 
 extern tree_node_t *g_song_library;

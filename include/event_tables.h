@@ -3,18 +3,18 @@
 
 #include <inttypes.h>
 
-typedef struct sys_event {
+typedef struct sys_event_s {
   uint32_t data_len;
   uint8_t *data;
 } sys_event_t;
 
-typedef struct meta_event {
+typedef struct meta_event_s {
   const char *name;
   uint32_t data_len;
   uint8_t *data;  
 } meta_event_t;
 
-typedef struct midi_event {
+typedef struct midi_event_s {
   const char *name;
   uint8_t status;
   uint8_t data_len;
