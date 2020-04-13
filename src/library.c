@@ -194,13 +194,13 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   new_node->song = parse_file(path);
   new_node->song_name = strchr(new_node->song->path, '/') + 1;
   printf("%s\n", new_node->song_name);
-  return tree_insert(&g_song_library, new_node);
+  return tree_insert(&g_song_library, new_node) - 1;
 }
 
 void make_library(const char *path) {
   int status = 0;
   do {
     status = ftw(path, (void *) ftw_insert, 1);
-    assert(status != DUPLICATE_SONG);
+    assert(status != DUPLICATE_SONG - 1);
   } while (status != 0);
 }
