@@ -177,7 +177,7 @@ void write_song_list(FILE *fp, tree_node_t *tree) {
 }
 
 /* Define make_library here */
-void ftw_insert(const char *path, const struct stat *sb, int typeflag) {
+int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   char *extension = strchr(path, '.');
   if (extension == NULL) {
     return;
@@ -194,12 +194,13 @@ void ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   new_node->song = parse_file(path);
   new_node->song_name = strchr(new_node->song->path, '/') + 1;
   printf("%s\n", new_node->song_name);
-  tree_insert(&g_song_library, new_node);
+  return tree_insert(&g_song_library, new_node);
 }
 
 void make_library(const char *path) {
   int status = 0;
   do {
     status = ftw(path, (void *) ftw_insert, 1);
-  } while (status);
+    assert(status != DUPLICATE_SONG);
+  } while (status != 0);
 }
