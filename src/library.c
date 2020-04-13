@@ -207,7 +207,8 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   }
   printf("%s\n", path);
   if (find_parent_pointer(&g_song_library, strrchr(path, '/') + 1) != NULL) {
-    tree_node_t **end = find_parent_pointer(&g_song_library, strrchr(path, '/') + 1);
+    tree_node_t **end = NULL; 
+    *end = find_parent_pointer(&g_song_library, strrchr(path, '/') + 1);
     if (strcmp(*end->song->path, path) == 0) {
       return 2;
     }
