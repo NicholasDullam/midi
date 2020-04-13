@@ -198,12 +198,12 @@ void write_song_list(FILE *fp, tree_node_t *tree) {
 int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   char *extension = strrchr(path, '.');
   if (extension == NULL) {
-    return 1;
+    return;
   }
   extension = extension + 1;
   printf("%s", extension);
   if ((typeflag != FTW_F) || (strcmp(extension, "mid") != 0)) {
-    return 1;
+    return;
   }
   printf("%s\n", path);
   tree_node_t *new_node = malloc(sizeof(tree_node_t));
@@ -214,15 +214,13 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   printf("%s\n", new_node->song_name);
   if (tree_insert(&g_song_library, new_node) == DUPLICATE_SONG) {
     free_node(new_node);
-    return DUPLICATE_SONG-1;
   }
-  return 1;
 }
 
 void make_library(const char *path) {
   int status = 0;
   do {
-    status = ftw(path, (int *) ftw_insert, 1);
+    status = ftw(path, (void *) ftw_insert, 1);
     assert(status != DUPLICATE_SONG-1);
     //printf("\n%d\n", status);
   } while (status != 0 && status != -1);
