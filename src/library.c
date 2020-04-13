@@ -11,9 +11,16 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ftw.h>
+
 /* Define find_parent_pointer here */
 
 tree_node_t *g_song_library = NULL;
+
+/*
+ *
+ *
+ *
+ */
 
 tree_node_t **find_parent_pointer(tree_node_t **root, const char *song_name) {
   assert(root != NULL);
@@ -31,9 +38,13 @@ tree_node_t **find_parent_pointer(tree_node_t **root, const char *song_name) {
     }
   }
   return NULL;
-}
+} /* find_parent_pointer() */
 
-/* Define tree_insert here */
+/*
+ *
+ *
+ *
+ */
 
 int tree_insert(tree_node_t **root, tree_node_t *new_node) {
   assert(root != NULL);
@@ -62,9 +73,13 @@ int tree_insert(tree_node_t **root, tree_node_t *new_node) {
 
   *root = new_node;
   return INSERT_SUCCESS;
-}
+} /* tree_insert() */
 
-/* Define remove_song_from_tree here */
+/*
+ *
+ *
+ *
+ */
 
 int remove_song_from_tree(tree_node_t **root, const char *song_name) {
   assert(root != NULL);
@@ -105,24 +120,38 @@ int remove_song_from_tree(tree_node_t **root, const char *song_name) {
     }
   }
   return SONG_NOT_FOUND;
-}
+} /* remove_song_from_tree() */
 
-/* Define free_node here */
+/*
+ *
+ *
+ *
+ */
 
 void free_node(tree_node_t *node) {
   assert(node != NULL);
   free_song(node->song);
   free(node);
-}
+} /* free_node() */
 
-/* Define print_node here */
+/*
+ *
+ *
+ *
+ */
 
 void print_node(tree_node_t *node, FILE *fp) {
-  if (node == NULL) return;
+  if (node == NULL) {
+    return;
+  }
   fprintf(fp, "%s\n", node->song_name);
-}
+} /* print_node() */
 
-/* Define traverse_pre_order here */
+/*
+ *
+ *
+ *
+ */
 
 void traverse_pre_order(tree_node_t *node, void *data, traversal_func_t func) {
   assert(data != NULL);
@@ -136,9 +165,13 @@ void traverse_pre_order(tree_node_t *node, void *data, traversal_func_t func) {
   if (node->right_child != NULL) {
     traverse_pre_order(node->right_child, data, func);
   }
-}
+} /* traverse_pre_order() */
 
-/* Define traverse_in_order here */
+/*
+ *
+ *
+ *
+ */
 
 void traverse_in_order(tree_node_t *node, void *data, traversal_func_t func){
   assert(data != NULL);
@@ -152,9 +185,13 @@ void traverse_in_order(tree_node_t *node, void *data, traversal_func_t func){
   if (node->right_child != NULL) {
     traverse_in_order(node->right_child, data, func);
   }
-}
+} /* traverse_in_order() */
 
-/* Define traverse_post_order here */
+/*
+ *
+ *
+ *
+ */
 
 void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
   assert(data != NULL);
@@ -168,9 +205,13 @@ void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
     traverse_post_order(node->right_child, data, func);
   }
   func(node, data);
-}
+} /* traverse_post_order() */
 
-/* Define free_library here */
+/*
+ *
+ *
+ *
+ */
 
 void free_library(tree_node_t *tree) {
   if (tree == NULL) {
@@ -186,26 +227,33 @@ void free_library(tree_node_t *tree) {
   }
 
   free_node(tree);
-}
+} /* free_library() */
 
-/* Define write_song_list here */
+/*
+ *
+ *
+ *
+ */
 
 void write_song_list(FILE *fp, tree_node_t *tree) {
   traverse_in_order(tree, fp, (void *) print_node);
-}
+} /* write_song_list() */
 
-/* Define make_library here */
+/*
+ *
+ *
+ *
+ */
+
 int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   char *extension = strrchr(path, '.');
   if (extension == NULL) {
     return 0;
   }
   extension = extension + 1;
-  printf("%s", extension);
   if ((typeflag != FTW_F) || (strcmp(extension, "mid") != 0)) {
     return 0;
   }
-  printf("%s\n", path);
   if (find_parent_pointer(&g_song_library, strrchr(path, '/') + 1) != NULL) {
     tree_node_t **end = find_parent_pointer(&g_song_library, strrchr(path, '/') + 1);
     if (strcmp((*end)->song->path, path) == 0) {
@@ -218,16 +266,20 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   new_node->right_child = NULL;
   new_node->song = parse_file(path);
   new_node->song_name = strrchr(new_node->song->path, '/') + 1;
-  printf("%s\n", new_node->song_name);
   tree_insert(&g_song_library, new_node);
   return 0;
-}
+} /* ftw_insert() */
+
+/*
+ *
+ *
+ *
+ */
 
 void make_library(const char *path) {
   int status = 0;
   do {
     status = ftw(path, (void *) ftw_insert, 1);
     assert(status != 1);
-    printf("\n%d\n", status);
-  } while (status != 2 && status != -1);
-}
+  } while ((status != 2) && (status != -1));
+} /* make_library() */

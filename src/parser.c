@@ -26,13 +26,11 @@ song_data_t *parse_file(const char *file_path) {
   parse_data->path[strlen(file_path)] = '\0';
   parse_header(fp, parse_data);
   int test = ftell(fp);
-  printf("%d", test);
   fseek(fp, 0, SEEK_END);
-  printf("%ld", ftell(fp));
   assert(test == ftell(fp));
   fclose(fp);
   return parse_data;
-}
+} /* parse_file() */
 
 /* Define parse_header here */
 
@@ -58,10 +56,12 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
   for (int i = 0; i < 2; i++) {
     fread(&format_buffer[i], 1, 1, fp);
   }
+
   format = end_swap_16(format_buffer);
   assert((format == 0)
     || (format == 1)
     || (format == 2));
+
   parse_data->format = format;
   for (int i = 0; i < 2; i++) {
     fread(&ntrks_buffer[i], 1, 1, fp);
@@ -90,7 +90,7 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
   for (int i = 0; i < parse_data->num_tracks; i++) {
     parse_track(fp, parse_data);
   }
-}
+} /* parse_header() */
 
 /* Define parse_track here */
 
@@ -123,7 +123,6 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
   fread(type, 4, 1, fp);
   assert(strcmp(type, "MTrk") == 0);
 
-
   for (int i = 0; i < 4; i++) {
     fread(&length[i], 1, 1, fp);
   }
@@ -140,7 +139,7 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
     curr_enode->next_event->event = NULL;
     curr_enode = curr_enode->next_event;
   }
-}
+} /* parse_track() */
 
 /* Define parse_event here */
 
@@ -159,7 +158,7 @@ event_t *parse_event(FILE *fp) {
       event->midi_event = parse_midi_event(fp, event->type);
   }
   return event;
-}
+} /* parse_event() */
 
 /* Define parse_sys_event here */
 
@@ -173,7 +172,7 @@ sys_event_t parse_sys_event(FILE *fp, uint8_t data) {
     fread(&(event.data[i]), 1, 1, fp);
   }
   return event;
-}
+} /* parse_sys_event() */
 
 /* Define parse_meta_event here */
 
@@ -194,7 +193,7 @@ meta_event_t parse_meta_event(FILE *fp) {
     fread(&(event.data[i]), 1, 1, fp);
   }
   return event;
-}
+} /* parse_meta_event() */
 
 /* Define parse_midi_event here */
 
@@ -224,7 +223,7 @@ midi_event_t parse_midi_event(FILE *fp, uint8_t status) {
   }
 
   return event;
-}
+} /* parse_midi_event() */
 
 /* Define parse_var_len here */
 
@@ -245,7 +244,7 @@ uint32_t parse_var_len(FILE *fp) {
   }
 
   return length;
-}
+} /* parse_var_len() */
 
 /* Define event_type here */
 
@@ -261,7 +260,7 @@ uint8_t event_type(event_t *event) {
     default:
       return MIDI_EVENT_T;
   }
-}
+} /* event_type() */
 
 /* Define free_song here */
 
@@ -279,7 +278,7 @@ void free_song(song_data_t *song) {
   free(song->path);
   free(song);
   song = NULL;
-}
+} /* free_song() */
 
 /* Define free_track_node here */
 
@@ -297,7 +296,7 @@ void free_track_node(track_node_t *track_node) {
   free(track_node->track);
   free(track_node);
   track_node = NULL;
-}
+} /* free_track_node() */
 
 /* Define free_event_node here */
 
@@ -311,17 +310,15 @@ void free_event_node(event_node_t *event_node) {
       free(event_node->event->sys_event.data);
       break;
     case META_EVENT:
-      //free(event_node->event->meta_event.name);
       free(event_node->event->meta_event.data);
       break;
     default:
-      //free(event_node->event->midi_event.name);
       free(event_node->event->midi_event.data);
   }
   free(event_node->event);
   free(event_node);
   event_node = NULL;
-}
+} /* free_event_node() */
 
 /* Define end_swap_16 here */
 
@@ -329,7 +326,7 @@ uint16_t end_swap_16(uint8_t buffer[2]) {
   uint16_t reverse = (buffer[0] << 8)
     | buffer[1];
   return reverse;
-}
+} /* end_swap_16() */
 
 /* Define end_swap_32 here */
 
@@ -339,4 +336,4 @@ uint32_t end_swap_32(uint8_t buffer[4]) {
     | (buffer[2] << 8)
     | (buffer[3]);
   return reverse;
-}
+} /* end_swap_32() */
