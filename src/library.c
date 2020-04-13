@@ -202,5 +202,5 @@ void make_library(const char *path) {
   do {
     status = ftw(path, (void *) ftw_insert, 1);
     printf("\n%d\n", status);
-  } while (status != 0 || status != -1);
+  } while (status != 0 && status != -1);
 }
