@@ -10,6 +10,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ftw.h>
 /* Define find_parent_pointer here */
 
 tree_node_t *g_song_library = NULL;
@@ -180,12 +181,12 @@ void ftw_insert(const char *path) {
   tree_node_t new_node = malloc(sizeof(tree_node_t));
   new_node->song = parse_file(path);
   new_node->song_name = strchr(new_node->song->name, '/') + 1;
-  insert_node(new_node);
+  tree_insert(&g_song_library, new_node);
 }
 
 void make_library(const char *path) {
   int status = 0;
   do {
     status = ftw(path, (void *) ftw_insert, FTW_F);
-  } while (status)
+  } while (status);
 }
