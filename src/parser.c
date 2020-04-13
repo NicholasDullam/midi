@@ -11,7 +11,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-
 uint8_t midi_status = 0;
 /* Define parse_file here */
 
