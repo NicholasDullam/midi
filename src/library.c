@@ -178,7 +178,7 @@ void write_song_list(FILE *fp, tree_node_t *tree) {
 
 /* Define make_library here */
 void ftw_insert(const char *path) {
-  tree_node_t new_node = malloc(sizeof(tree_node_t));
+  tree_node_t *new_node = malloc(sizeof(tree_node_t));
   new_node->song = parse_file(path);
   new_node->song_name = strchr(new_node->song->name, '/') + 1;
   tree_insert(&g_song_library, new_node);
