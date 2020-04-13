@@ -180,12 +180,12 @@ void write_song_list(FILE *fp, tree_node_t *tree) {
 int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   char *extension = strchr(path, '.');
   if (extension == NULL) {
-    return 1;
+    return 0;
   }
   extension = extension + 1;
   printf("%s", extension);
   if ((typeflag != FTW_F) || (strcmp(extension, "mid") != 0)) {
-    return 1;
+    return 0;
   }
   printf("%s\n", path);
   tree_node_t *new_node = malloc(sizeof(tree_node_t));
