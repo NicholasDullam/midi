@@ -167,7 +167,9 @@ event_t *parse_event(FILE *fp) {
 sys_event_t parse_sys_event(FILE *fp, uint8_t data) {
   sys_event_t event = {};
   event.data_len = parse_var_len(fp);
-  event.data = malloc(event.data_len);
+  if (event.data_len > 0) {
+    event.data = malloc(event.data_len * sizeof(uint8_t));
+  }
   for (int i = 0; i < event.data_len; i++) {
     fread(&(event.data[i]), 1, 1, fp);
   }
@@ -186,7 +188,9 @@ meta_event_t parse_meta_event(FILE *fp) {
   if (META_TABLE[type].data_len != 0) {
     assert(event.data_len == META_TABLE[type].data_len);
   }
-  event.data = malloc(event.data_len);
+  if (event.data_len > 0) {
+    event.data = malloc(event.data_len * sizeof(uint8_t));
+  }
   for (int i = 0; i < event.data_len; i++) {
     fread(&(event.data[i]), 1, 1, fp);
   }
@@ -208,7 +212,9 @@ midi_event_t parse_midi_event(FILE *fp, uint8_t status) {
   event.name = MIDI_TABLE[event.status].name;
   assert(event.name);
   event.data_len = MIDI_TABLE[event.status].data_len;
-  event.data = malloc(event.data_len);
+  if (event.data_len > 0) {
+    event.data = malloc(event.data_len * sizeof(uint8_t));
+  }
   if (count && (count - 1) < event.data_len) {
     event.data[0] = status;
   }
