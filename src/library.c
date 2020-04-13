@@ -113,7 +113,7 @@ void free_node(tree_node_t *node) {
 /* Define print_node here */
 
 void print_node(tree_node_t *node, FILE *fp) {
-  fprintf("%s\n", node->song_name);
+  fprintf(fp, "%s\n", node->song_name);
 }
 
 /* Define traverse_pre_order here */
