@@ -82,18 +82,15 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
     assert(fread(&ntrks_buffer[i], 1, 1, fp));
   }
 
-  uint16_t division = 0;
-  division = end_swap_16(ntrks_buffer);
+  uint16_t division = end_swap_16(ntrks_buffer);
 
   if ((division & 0x8000) != 0x8000) {
     parse_data->division.uses_tpq = true;
     parse_data->division.ticks_per_qtr = division;
   } else {
     parse_data->division.uses_tpq = false;
-    uint16_t temp = division;
-    uint8_t test = temp >> 8;
-    parse_data->division.frames_per_sec = test;
-    parse_data->division.ticks_per_frame = temp & 0x00FF;
+    parse_data->division.frames_per_sec = division >> 8;
+    parse_data->division.ticks_per_frame = division & 0x00FF;
   }
 
   for (int i = 0; i < parse_data->num_tracks; i++) {
