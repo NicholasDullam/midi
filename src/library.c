@@ -118,7 +118,9 @@ void free_node(tree_node_t *node) {
 /* Define print_node here */
 
 void print_node(tree_node_t *node, FILE *fp) {
-  if (node == NULL) break;
+  if (node == NULL) {
+    break;
+  }
   fprintf(fp, "%s\n", node->song_name);
 }
 
