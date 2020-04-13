@@ -76,7 +76,7 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
   division = end_swap_16(ntrks_buffer);
   printf("%d", division);
 
-  if (division & 0x8000 != 0x8000) {
+  if ((division & 0x8000) != 0x8000) {
     parse_data->division.uses_tpq = true;
     parse_data->division.ticks_per_qtr = division;
     printf("%d", parse_data->division.ticks_per_qtr);
