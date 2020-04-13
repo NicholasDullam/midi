@@ -17,6 +17,8 @@ tree_node_t *g_song_library = NULL;
 
 tree_node_t **find_parent_pointer(tree_node_t **root, const char *song_name) {
   assert(root != NULL);
+  assert(song_name != NULL);
+
   tree_node_t *curr_node = *root;
   while (curr_node != NULL) {
     if (strcmp(curr_node->song_name, song_name) > 0) {
@@ -35,6 +37,8 @@ tree_node_t **find_parent_pointer(tree_node_t **root, const char *song_name) {
 
 int tree_insert(tree_node_t **root, tree_node_t *new_node) {
   assert(root != NULL);
+  assert(new_node != NULL);
+
   tree_node_t *curr_node = *root;
   while (curr_node != NULL) {
     if (strcmp(curr_node->song_name, new_node->song_name) > 0) {
@@ -114,12 +118,16 @@ void free_node(tree_node_t *node) {
 /* Define print_node here */
 
 void print_node(tree_node_t *node, FILE *fp) {
+  if (node == NULL) break;
   fprintf(fp, "%s\n", node->song_name);
 }
 
 /* Define traverse_pre_order here */
 
 void traverse_pre_order(tree_node_t *node, void *data, traversal_func_t func) {
+  assert(node != NULL);
+  assert(data != NULL);
+
   func(node, data);
 
   if (node->left_child != NULL) {
@@ -134,6 +142,9 @@ void traverse_pre_order(tree_node_t *node, void *data, traversal_func_t func) {
 /* Define traverse_in_order here */
 
 void traverse_in_order(tree_node_t *node, void *data, traversal_func_t func) {
+  assert(node != NULL);
+  assert(data != NULL);
+
   if (node->left_child != NULL) {
     traverse_in_order(node->left_child, data, func);
   }
@@ -146,6 +157,9 @@ void traverse_in_order(tree_node_t *node, void *data, traversal_func_t func) {
 /* Define traverse_post_order here */
 
 void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
+  assert(node != NULL);
+  assert(data != NULL);
+
   if (node->left_child != NULL) {
     traverse_post_order(node->left_child, data, func);
   }
@@ -158,6 +172,8 @@ void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
 /* Define free_library here */
 
 void free_library(tree_node_t *tree) {
+  assert(tree != NULL);
+
   if (tree->left_child != NULL) {
     free_library(tree->left_child);
   }
