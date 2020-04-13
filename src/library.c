@@ -173,7 +173,9 @@ void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
 /* Define free_library here */
 
 void free_library(tree_node_t *tree) {
-  assert(tree != NULL);
+  if (tree == NULL) {
+    return;
+  }
 
   if (tree->left_child != NULL) {
     free_library(tree->left_child);
