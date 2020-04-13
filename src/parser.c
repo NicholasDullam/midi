@@ -26,7 +26,11 @@ song_data_t *parse_file(const char *file_path) {
   strncpy(parse_data->path, file_path, strlen(file_path));
   parse_data->path[strlen(file_path)] = '\0';
   parse_header(fp, parse_data);
-  //assert(feof(fp));
+  int test = ftell(fp);
+  printf("%d", test);
+  fseek(fp, 0, SEEK_END);
+  printf("%ld", ftell(fp));
+  assert(test == ftell(fp));
   fclose(fp);
   return parse_data;
 }
@@ -86,7 +90,7 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
     uint8_t test = temp >> 8;
     parse_data->division.frames_per_sec = test;
     printf("testing%d", parse_data->division.frames_per_sec);
-    parse_data->division.ticks_per_frame = temp & 0x00FF;
+    parse_data->division.ticks_per_frame = temp & 0x0000;
     printf("testing%d", parse_data->division.ticks_per_frame);
   }
 
@@ -208,6 +212,7 @@ midi_event_t parse_midi_event(FILE *fp, uint8_t status) {
 
   event.status = midi_status;
   event.name = MIDI_TABLE[event.status].name;
+  assert(event.name);
   event.data_len = MIDI_TABLE[event.status].data_len;
   event.data = malloc(event.data_len);
   if (count && (count - 1) < event.data_len) {
@@ -274,6 +279,7 @@ void free_song(song_data_t *song) {
 
   free(song->path);
   free(song);
+  song = NULL;
 }
 
 /* Define free_track_node here */
@@ -291,6 +297,7 @@ void free_track_node(track_node_t *track_node) {
 
   free(track_node->track);
   free(track_node);
+  track_node = NULL;
 }
 
 /* Define free_event_node here */
@@ -314,6 +321,7 @@ void free_event_node(event_node_t *event_node) {
   }
   free(event_node->event);
   free(event_node);
+  event_node = NULL;
 }
 
 /* Define end_swap_16 here */
