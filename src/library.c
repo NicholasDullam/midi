@@ -206,7 +206,7 @@ void ftw_insert(const char *path, const struct stat *sb, int typeflag) {
     return;
   }
   printf("%s\n", path);
-
+  assert(find_parent_pointer(&g_song_library, (strrchr(path, '/') + 1)));
   tree_node_t *new_node = malloc(sizeof(tree_node_t));
   new_node->left_child = NULL;
   new_node->right_child = NULL;
