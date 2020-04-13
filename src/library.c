@@ -181,10 +181,11 @@ void ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   if (typeflag != FTW_F) {
     return;
   }
-  printf("%s", path);
+  printf("%s\n", path);
   tree_node_t *new_node = malloc(sizeof(tree_node_t));
   new_node->song = parse_file(path);
   new_node->song_name = strchr(new_node->song->path, '/') + 1;
+  printf("%s\n", new_node->song_name);
   tree_insert(&g_song_library, new_node);
 }
 
