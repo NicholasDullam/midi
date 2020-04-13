@@ -12,7 +12,12 @@
 #include<stdlib.h>
 
 uint8_t midi_status = 0;
-/* Define parse_file here */
+
+/*
+ * parse_file
+ * parses the given file
+ * reading in all midi data
+ */
 
 song_data_t *parse_file(const char *file_path) {
   song_data_t *parse_data = NULL;
@@ -32,7 +37,11 @@ song_data_t *parse_file(const char *file_path) {
   return parse_data;
 } /* parse_file() */
 
-/* Define parse_header here */
+/*
+ * parse_header
+ * parses the given file
+ * for the midi_header
+ */
 
 void parse_header(FILE *fp, song_data_t *parse_data) {
   char type[4] = "";
@@ -41,11 +50,11 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
   uint8_t length_buffer[4] = {0};
 
   assert(fp != NULL);
-  fread(type, 4, 1, fp);
+  assert(fread(type, 4, 1, fp));
   assert(strcmp(type, "MThd") == 0);
 
   for (int i = 0; i < 4; i++) {
-    fread(&length_buffer[i], sizeof(uint8_t), 1, fp);
+    assert(fread(&length_buffer[i], sizeof(uint8_t), 1, fp));
   }
 
   length = end_swap_32(length_buffer);
@@ -54,7 +63,7 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
   uint8_t format_buffer[2] = {0};
   uint16_t format = 0;
   for (int i = 0; i < 2; i++) {
-    fread(&format_buffer[i], 1, 1, fp);
+    assert(fread(&format_buffer[i], 1, 1, fp));
   }
 
   format = end_swap_16(format_buffer);
@@ -64,13 +73,13 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
 
   parse_data->format = format;
   for (int i = 0; i < 2; i++) {
-    fread(&ntrks_buffer[i], 1, 1, fp);
+    assert(fread(&ntrks_buffer[i], 1, 1, fp));
   }
 
   parse_data->num_tracks = end_swap_16(ntrks_buffer);
 
   for (int i = 0; i < 2; i++) {
-    fread(&ntrks_buffer[i], 1, 1, fp);
+    assert(fread(&ntrks_buffer[i], 1, 1, fp));
   }
 
   uint16_t division = 0;
@@ -92,7 +101,11 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
   }
 } /* parse_header() */
 
-/* Define parse_track here */
+/*
+ * parse_track
+ * parses the given file
+ * for associated track data
+ */
 
 void parse_track(FILE *fp, song_data_t *parse_data) {
   track_node_t *curr_node = NULL;
@@ -120,19 +133,19 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
   char type[4] = "";
   uint8_t length[4] = {0};
   assert(fp != NULL);
-  fread(type, 4, 1, fp);
+  assert(fread(type, 4, 1, fp));
   assert(strcmp(type, "MTrk") == 0);
 
   for (int i = 0; i < 4; i++) {
-    fread(&length[i], 1, 1, fp);
+    assert(fread(&length[i], 1, 1, fp));
   }
   curr_node->track->length = end_swap_32(length);
 
   while (1) {
     curr_enode->event = parse_event(fp);
     curr_enode->next_event = NULL;
-    if (event_type(curr_enode->event) == META_EVENT_T && 
-      strcmp(curr_enode->event->meta_event.name, "End of Track") == 0) {
+    if ((event_type(curr_enode->event) == META_EVENT_T) &&
+      (strcmp(curr_enode->event->meta_event.name, "End of Track") == 0)) {
       break;
     }
     curr_enode->next_event = malloc(sizeof(event_node_t));
@@ -141,13 +154,17 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
   }
 } /* parse_track() */
 
-/* Define parse_event here */
+/*
+ * parse_event
+ * parses the given file
+ * chosing the event_type
+ */
 
 event_t *parse_event(FILE *fp) {
   event_t *event = malloc(sizeof(event_t));
   event->delta_time = parse_var_len(fp);
-  fread(&(event->type), 1, 1, fp);
-  switch(event_type(event)) {
+  assert(fread(&(event->type), 1, 1, fp));
+  switch (event_type(event)) {
     case SYS_EVENT_T:
       event->sys_event = parse_sys_event(fp, event->type);
       break;
@@ -160,7 +177,11 @@ event_t *parse_event(FILE *fp) {
   return event;
 } /* parse_event() */
 
-/* Define parse_sys_event here */
+/*
+ * parse_sys_event
+ * parses the given file
+ * for a sys_event
+ */
 
 sys_event_t parse_sys_event(FILE *fp, uint8_t data) {
   sys_event_t event = {};
@@ -169,17 +190,21 @@ sys_event_t parse_sys_event(FILE *fp, uint8_t data) {
     event.data = malloc(event.data_len * sizeof(uint8_t));
   }
   for (int i = 0; i < event.data_len; i++) {
-    fread(&(event.data[i]), 1, 1, fp);
+    assert(fread(&(event.data[i]), 1, 1, fp));
   }
   return event;
 } /* parse_sys_event() */
 
-/* Define parse_meta_event here */
+/*
+ * parse_meta_event
+ * parses the given file
+ * for a meta_event
+ */
 
 meta_event_t parse_meta_event(FILE *fp) {
   meta_event_t event = {};
   uint8_t type = 0;
-  fread(&type, 1, 1, fp);
+  assert(fread(&type, 1, 1, fp));
   event.name = META_TABLE[type].name;
   assert(event.name);
   event.data_len = parse_var_len(fp);
@@ -190,12 +215,16 @@ meta_event_t parse_meta_event(FILE *fp) {
     event.data = malloc(event.data_len * sizeof(uint8_t));
   }
   for (int i = 0; i < event.data_len; i++) {
-    fread(&(event.data[i]), 1, 1, fp);
+    assert(fread(&(event.data[i]), 1, 1, fp));
   }
   return event;
 } /* parse_meta_event() */
 
-/* Define parse_midi_event here */
+/*
+ * parse_midi_event
+ * parses the given file
+ * for a midi_event
+ */
 
 midi_event_t parse_midi_event(FILE *fp, uint8_t status) {
   int count = 0;
@@ -213,32 +242,36 @@ midi_event_t parse_midi_event(FILE *fp, uint8_t status) {
   if (event.data_len > 0) {
     event.data = malloc(event.data_len * sizeof(uint8_t));
   }
-  if (count && (count - 1) < event.data_len) {
+  if ((count) && ((count - 1) < event.data_len)) {
     event.data[0] = status;
   }
 
   while (count < event.data_len) {
-    fread(&(event.data[count]), 1, 1, fp);
+    assert(fread(&(event.data[count]), 1, 1, fp));
     count = count + 1;
   }
 
   return event;
 } /* parse_midi_event() */
 
-/* Define parse_var_len here */
+/*
+ * parse_var_len
+ * parses the given file
+ * for a variable length quantity
+ */
 
 uint32_t parse_var_len(FILE *fp) {
   uint32_t length = 0;
   uint8_t buffer = 0;
 
-  fread(&buffer, 1, 1, fp);
+  assert(fread(&buffer, 1, 1, fp));
   length = buffer & 0x7F;
 
-  while(1) {
+  while (1) {
     if ((buffer & 0x80) != 0x80) {
       break;
     }
-    fread(&buffer, 1, 1, fp);
+    assert(fread(&buffer, 1, 1, fp));
     length = length << 7;
     length = length + (buffer & 0x7F);
   }
@@ -246,11 +279,17 @@ uint32_t parse_var_len(FILE *fp) {
   return length;
 } /* parse_var_len() */
 
-/* Define event_type here */
+/*
+ * event_type
+ * takes the given event values
+ * and returns a general type
+ */
 
 uint8_t event_type(event_t *event) {
-   switch (event->type) {
+  switch (event->type) {
     case SYS_EVENT_1:
+      return SYS_EVENT_T;
+      break;
     case SYS_EVENT_2:
       return SYS_EVENT_T;
       break;
@@ -262,7 +301,11 @@ uint8_t event_type(event_t *event) {
   }
 } /* event_type() */
 
-/* Define free_song here */
+/*
+ * free_song
+ * frees all memory
+ * associated with the given song
+ */
 
 void free_song(song_data_t *song) {
   assert(song != NULL);
@@ -280,7 +323,11 @@ void free_song(song_data_t *song) {
   song = NULL;
 } /* free_song() */
 
-/* Define free_track_node here */
+/*
+ * free_track_node
+ * frees all associated data
+ * for the given track
+ */
 
 void free_track_node(track_node_t *track_node) {
   assert(track_node != NULL);
@@ -298,7 +345,11 @@ void free_track_node(track_node_t *track_node) {
   track_node = NULL;
 } /* free_track_node() */
 
-/* Define free_event_node here */
+/*
+ * free_event_node
+ * frees all associated data
+ * for the given event
+ */
 
 void free_event_node(event_node_t *event_node) {
   assert(event_node != NULL);
@@ -320,7 +371,11 @@ void free_event_node(event_node_t *event_node) {
   event_node = NULL;
 } /* free_event_node() */
 
-/* Define end_swap_16 here */
+/*
+ * end_swap_16
+ * flips the endian of the given
+ * 16 bit value
+ */
 
 uint16_t end_swap_16(uint8_t buffer[2]) {
   uint16_t reverse = (buffer[0] << 8)
@@ -328,7 +383,11 @@ uint16_t end_swap_16(uint8_t buffer[2]) {
   return reverse;
 } /* end_swap_16() */
 
-/* Define end_swap_32 here */
+/*
+ * end_swap_32
+ * flips the endian of the given
+ * 32bit value
+ */
 
 uint32_t end_swap_32(uint8_t buffer[4]) {
   uint32_t reverse = (buffer[0] << 24)
