@@ -150,7 +150,7 @@ void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
     traverse_post_order(node->left_child, data, func);
   }
   if (node->right_child != NULL) {
-    traverse_post_order(node->right_child_data, func);
+    traverse_post_order(node->right_child, data, func);
   }
   func(node, data);
 }
