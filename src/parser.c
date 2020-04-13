@@ -11,7 +11,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-uint8_t midi_status = 0;
+uint8_t g_midi_status = 0;
 
 /*
  * parse_file
@@ -230,12 +230,12 @@ midi_event_t parse_midi_event(FILE *fp, uint8_t status) {
   int count = 0;
   midi_event_t event = {};
   if (status & 0x80) {
-    midi_status = status;
+    g_midi_status = status;
   } else {
     count = 1;
   }
 
-  event.status = midi_status;
+  event.status = g_midi_status;
   event.name = MIDI_TABLE[event.status].name;
   assert(event.name);
   event.data_len = MIDI_TABLE[event.status].data_len;
