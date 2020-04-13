@@ -119,7 +119,15 @@ void print_node(tree_node_t *node, FILE *fp) {
 /* Define traverse_pre_order here */
 
 void traverse_pre_order(tree_node_t *node, void *data, traversal_func_t func) {
+  func(node, data);
 
+  if (node->left_child != NULL) {
+    traverse_pre_order(node->left_child, data, func);
+  }
+
+  if (node->right_child != NULL) {
+    traverse_pre_order(node->right_child, data, func);
+  }
 }
 
 /* Define traverse_in_order here */
@@ -138,7 +146,13 @@ void traverse_in_order(tree_node_t *node, void *data, traversal_func_t func) {
 /* Define traverse_post_order here */
 
 void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
-
+  if (node->left_child != NULL) {
+    traverse_post_order(node->left_child, data, func);
+  }
+  if (node->right_child != NULL) {
+    traverse_post_order(node->right_child_data, func);
+  }
+  func(node, data);
 }
 
 /* Define free_library here */
