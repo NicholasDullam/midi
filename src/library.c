@@ -125,7 +125,14 @@ void traverse_pre_order(tree_node_t *node, void *data, traversal_func_t func) {
 /* Define traverse_in_order here */
 
 void traverse_in_order(tree_node_t *node, void *data, traversal_func_t func) {
-
+  if (node->left_child != NULL) {
+    traverse_in_order(node->left_child, data, func);
+  } else {
+    func(node, data);
+    if (node->right_child != NULL) {
+      traverse_in_order(node->right_child, data, func);
+    }
+  }
 }
 
 /* Define traverse_post_order here */
