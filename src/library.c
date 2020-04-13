@@ -222,7 +222,7 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
 void make_library(const char *path) {
   int status = 0;
   do {
-    status = ftw(path, (void *) ftw_insert, 1);
+    status = ftw(path, (int *) ftw_insert, 1);
     assert(status != DUPLICATE_SONG-1);
     //printf("\n%d\n", status);
   } while (status != 0 && status != -1);
