@@ -90,7 +90,7 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
     uint8_t test = temp >> 8;
     parse_data->division.frames_per_sec = test;
     printf("testing%d", parse_data->division.frames_per_sec);
-    parse_data->division.ticks_per_frame = temp & 0x0000;
+    parse_data->division.ticks_per_frame = temp & 0x00FF;
     printf("testing%d", parse_data->division.ticks_per_frame);
   }
 
@@ -122,7 +122,7 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
   }
 
   curr_node->track->event_list = malloc(sizeof(event_node_t));
-  curr_node->track->event_list->event = malloc(sizeof(event_t));
+  curr_node->track->event_list->event = NULL;
   event_node_t *curr_enode = curr_node->track->event_list;
 
   char type[4] = "";
@@ -143,7 +143,7 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
       break;
     }
     curr_enode->next_event = malloc(sizeof(event_node_t));
-    curr_enode->next_event->event = malloc(sizeof(event_t));
+    curr_enode->next_event->event = NULL;
     curr_enode = curr_enode->next_event;
   }
 
