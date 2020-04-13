@@ -195,7 +195,7 @@ void write_song_list(FILE *fp, tree_node_t *tree) {
 }
 
 /* Define make_library here */
-int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
+void ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   char *extension = strrchr(path, '.');
   if (extension == NULL) {
     return;
