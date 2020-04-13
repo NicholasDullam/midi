@@ -69,8 +69,6 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
   }
 
   parse_data->num_tracks = end_swap_16(ntrks_buffer);
-  printf("%d", parse_data->format);
-  printf("%d", parse_data->num_tracks);
 
   for (int i = 0; i < 2; i++) {
     fread(&ntrks_buffer[i], 1, 1, fp);
@@ -78,20 +76,16 @@ void parse_header(FILE *fp, song_data_t *parse_data) {
 
   uint16_t division = 0;
   division = end_swap_16(ntrks_buffer);
-  printf("%d", division);
 
   if ((division & 0x8000) != 0x8000) {
     parse_data->division.uses_tpq = true;
     parse_data->division.ticks_per_qtr = division;
-    printf("%d", parse_data->division.ticks_per_qtr);
   } else {
     parse_data->division.uses_tpq = false;
     uint16_t temp = division;
     uint8_t test = temp >> 8;
     parse_data->division.frames_per_sec = test;
-    printf("testing%d", parse_data->division.frames_per_sec);
     parse_data->division.ticks_per_frame = temp & 0x00FF;
-    printf("testing%d", parse_data->division.ticks_per_frame);
   }
 
   for (int i = 0; i < parse_data->num_tracks; i++) {
@@ -111,7 +105,6 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
     curr_node = parse_data->track_list;
   } else {
     curr_node = parse_data->track_list;
-    printf("%p", curr_node);
     while (curr_node->next_track != NULL) {
       curr_node = curr_node->next_track;
     }
@@ -130,6 +123,8 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
   assert(fp != NULL);
   fread(type, 4, 1, fp);
   assert(strcmp(type, "MTrk") == 0);
+
+
   for (int i = 0; i < 4; i++) {
     fread(&length[i], 1, 1, fp);
   }
@@ -146,7 +141,6 @@ void parse_track(FILE *fp, song_data_t *parse_data) {
     curr_enode->next_event->event = NULL;
     curr_enode = curr_enode->next_event;
   }
-
 }
 
 /* Define parse_event here */
