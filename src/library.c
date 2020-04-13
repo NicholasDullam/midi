@@ -216,6 +216,7 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
     free_node(new_node);
     return DUPLICATE_SONG-1;
   }
+  return 1;
 }
 
 void make_library(const char *path) {
