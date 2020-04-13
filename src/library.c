@@ -207,6 +207,10 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
   }
   printf("%s\n", path);
   if (find_parent_pointer(&g_song_library, strrchr(path, '/') + 1) != NULL) {
+    tree_node_t **end = find_parent_pointer(&g_song_library, strrchr(path, '/') + 1);
+    if (strcmp(*end->song->path, path) == 0) {
+      return 2;
+    }
     return 1;
   }
   tree_node_t *new_node = malloc(sizeof(tree_node_t));
@@ -225,5 +229,5 @@ void make_library(const char *path) {
     status = ftw(path, (void *) ftw_insert, 1);
     assert(status != 1);
     printf("\n%d\n", status);
-  } while (status != 1 && status != -1);
+  } while (status != 2 && status != -1);
 }
