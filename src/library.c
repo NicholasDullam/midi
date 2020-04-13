@@ -17,9 +17,9 @@
 tree_node_t *g_song_library = NULL;
 
 /*
- *
- *
- *
+ * find_parent_pointer
+ * searches the associated tree
+ * for the song_name
  */
 
 tree_node_t **find_parent_pointer(tree_node_t **root, const char *song_name) {
@@ -41,9 +41,9 @@ tree_node_t **find_parent_pointer(tree_node_t **root, const char *song_name) {
 } /* find_parent_pointer() */
 
 /*
- *
- *
- *
+ * tree_insert
+ * takes the given node
+ * and inserts it into the associated tree
  */
 
 int tree_insert(tree_node_t **root, tree_node_t *new_node) {
@@ -76,9 +76,9 @@ int tree_insert(tree_node_t **root, tree_node_t *new_node) {
 } /* tree_insert() */
 
 /*
- *
- *
- *
+ * remove_song_from_tree
+ * takes a specific song_name
+ * and removes it from the tree
  */
 
 int remove_song_from_tree(tree_node_t **root, const char *song_name) {
@@ -123,9 +123,9 @@ int remove_song_from_tree(tree_node_t **root, const char *song_name) {
 } /* remove_song_from_tree() */
 
 /*
- *
- *
- *
+ * free_node takes an
+ * associated node and frees
+ * all allocated memory
  */
 
 void free_node(tree_node_t *node) {
@@ -135,9 +135,9 @@ void free_node(tree_node_t *node) {
 } /* free_node() */
 
 /*
- *
- *
- *
+ * print_node
+ * takes the given node and fp
+ * printing the song_name to the document
  */
 
 void print_node(tree_node_t *node, FILE *fp) {
@@ -148,9 +148,9 @@ void print_node(tree_node_t *node, FILE *fp) {
 } /* print_node() */
 
 /*
- *
- *
- *
+ * traverse_pre_order
+ * takes the given tree
+ * and applies the function in pre_order
  */
 
 void traverse_pre_order(tree_node_t *node, void *data, traversal_func_t func) {
@@ -168,9 +168,9 @@ void traverse_pre_order(tree_node_t *node, void *data, traversal_func_t func) {
 } /* traverse_pre_order() */
 
 /*
- *
- *
- *
+ * traverse_in_order
+ * takes the given tree
+ * and applies the function in order
  */
 
 void traverse_in_order(tree_node_t *node, void *data, traversal_func_t func){
@@ -188,9 +188,9 @@ void traverse_in_order(tree_node_t *node, void *data, traversal_func_t func){
 } /* traverse_in_order() */
 
 /*
- *
- *
- *
+ * traverse_post_order
+ * takes the given tree
+ * and applies the funcion post order
  */
 
 void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
@@ -208,9 +208,9 @@ void traverse_post_order(tree_node_t *node, void *data, traversal_func_t func) {
 } /* traverse_post_order() */
 
 /*
- *
- *
- *
+ * free_library
+ * fress all memory on the
+ * associated tree
  */
 
 void free_library(tree_node_t *tree) {
@@ -230,9 +230,9 @@ void free_library(tree_node_t *tree) {
 } /* free_library() */
 
 /*
- *
- *
- *
+ * write_song_list
+ * takes the given tree and writes
+ * all song_names to the given document
  */
 
 void write_song_list(FILE *fp, tree_node_t *tree) {
@@ -240,9 +240,9 @@ void write_song_list(FILE *fp, tree_node_t *tree) {
 } /* write_song_list() */
 
 /*
- *
- *
- *
+ * ftw_insert is a supporter
+ * function for the ftw passthrough
+ * in make_library
  */
 
 int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
@@ -255,7 +255,8 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
     return 0;
   }
   if (find_parent_pointer(&g_song_library, strrchr(path, '/') + 1) != NULL) {
-    tree_node_t **end = find_parent_pointer(&g_song_library, strrchr(path, '/') + 1);
+    tree_node_t **end = find_parent_pointer(&g_song_library,
+      strrchr(path, '/') + 1);
     if (strcmp((*end)->song->path, path) == 0) {
       return 2;
     }
@@ -271,9 +272,9 @@ int ftw_insert(const char *path, const struct stat *sb, int typeflag) {
 } /* ftw_insert() */
 
 /*
- *
- *
- *
+ * make_library
+ * takes a given directory
+ * creating a library of midi files
  */
 
 void make_library(const char *path) {
