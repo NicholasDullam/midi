@@ -222,6 +222,6 @@ void make_library(const char *path) {
   do {
     status = ftw(path, (void *) ftw_insert, 1);
     assert(status != DUPLICATE_SONG-1);
-    //printf("\n%d\n", status);
+    printf("\n%d\n", status);
   } while (status != 0 && status != -1);
 }
