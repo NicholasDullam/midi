@@ -178,10 +178,11 @@ void write_song_list(FILE *fp, tree_node_t *tree) {
 
 /* Define make_library here */
 void ftw_insert(const char *path, const struct stat *sb, int typeflag) {
-  char *extension = strchr(path, '.') + 1;
+  char *extension = strchr(path, '.');
   if (extension == NULL) {
     return;
   }
+  extension = extension + 1;
   printf("%s", extension);
   if ((typeflag != FTW_F) || (strcmp(extension, "mid") != 0)) {
     return;
