@@ -75,7 +75,7 @@ void time_scale_cb(GtkSpinButton *spin_button, gpointer data) {
 /* Define draw_cb here */
 
 gboolean draw_cb(GtkDrawingArea *drawing_area, cairo_t *colors, gpointer data) {
-
+  return false;
 }
 
 /* Define warp_time_cb here */
