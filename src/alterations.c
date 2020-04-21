@@ -44,7 +44,7 @@ int change_event_instrument(event_t *event, remapping_t instruments) {
 
 /*Define change_event_note here */
 
-int change_event_node(event_t *event, remapping_t note) {
+int change_event_note(event_t *event, remapping_t note) {
   return 0;
 }
 
