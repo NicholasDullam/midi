@@ -50,7 +50,7 @@ int change_event_node(event_t *event, remapping_t note) {
 
 /*Define apply_to_events here */
 
-int apply_to_events(song_data_t *song, event_func_t, void *data) {
+int apply_to_events(song_data_t *song, event_func_t func, void *data) {
   return 0;
 }
 
