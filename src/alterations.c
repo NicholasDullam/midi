@@ -17,7 +17,7 @@ int change_event_octave(event_t *event, int *octave) {
   if (strcmp(event->midi_event.name, "Note on") == 0 ||
     strcmp(event->midi_event.name, "Note off") == 0 ||
     strcmp(event->midi_event.name, "Polyphonic Key Pressure")) {
-    int temp = event.midi_event.data[0]
+    uint8_t temp = event->midi_event.data[0];
     temp = temp + *octave;
 
     if (temp > 127 || temp < 0) {
