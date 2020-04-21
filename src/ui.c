@@ -8,27 +8,75 @@
 
 /* Define update_song_list here */
 
+void update_song_list() {
+
+}
+
 /* Define update_drawing_area here */
+
+void update_drawing_area() {
+
+}
 
 /* Define update_info here */
 
+void update_info() {
+
+}
+
 /* Define update_song here */
+
+void update_song() {
+
+}
 
 /* Define range_of_song here */
 
+void range_of_song(song_data_t *song, int *lower, int *higher, int *length) {
+
+}
+
 /* Define activate here */
+
+void activate(GtkApplication *application, gpointer data) {
+
+}
 
 /* Define add_song_cb here */
 
+void add_song_cb(GtkButton *button, gpointer data) {
+
+}
+
 /* Define load_songs_cb here */
+
+void load_songs_cb(GtkButton *button, gpointer data) {
+
+}
 
 /* Define song_selected_cb here */
 
+void song_selected_cb(GtkListBox *list, GtkListBoxRow *row) {
+
+}
+
 /* Define search_bar_cb here */
+
+void search_bar_cb(GtkSearchBar *search, gpointer data) {
+
+}
 
 /* Define time_scale_cb here */
 
+void time_scale_cb(GtkSpinButton *spin_button, gpointer data) {
+
+}
+
 /* Define draw_cb here */
+
+gboolean draw_cb(GtkDrawingArea *drawing_area, cairo_t *colors, gpointer data) {
+
+}
 
 /* Define warp_time_cb here */
 
