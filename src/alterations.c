@@ -14,10 +14,10 @@
 
 int change_event_octave(event_t *event, int *octave) {
   assert(event_type(event) == MIDI_EVENT_T);
-  if (strcmp(event->midi_event->name, "Note on") == 0 ||
-    strcmp(event->midi_event->name, "Note off") == 0 ||
-    strcmp(event->midi_event->name, "Polyphonic Key Pressure")) {
-    uint8_t temp = event->midi_event->data[0]
+  if (strcmp(event->midi_event.name, "Note on") == 0 ||
+    strcmp(event->midi_event.name, "Note off") == 0 ||
+    strcmp(event->midi_event.name, "Polyphonic Key Pressure")) {
+    uint8_t temp = event->midi_event.data[0]
     temp = temp + *octave;
 
     if (temp > 127 || temp < 0) {
@@ -63,7 +63,7 @@ int change_octave(song_data_t *song, int octave) {
 /*Define warp_time here */
 
 int warp_time(song_data_t *song, float multiplier) {
-
+  return 0;
 }
 
 /*Define remap_instruments here */
