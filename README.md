@@ -1,4 +1,4 @@
 # MIDI
-## What is this?
+### What is this?
 CS 240 Project
-## Getting started
+### Getting started
