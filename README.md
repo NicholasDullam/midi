@@ -14,3 +14,7 @@ To clean the repository of compilations run...
 ```
 make clean
 ```
+To run the shell run...
+```
+./proj1_main_p1
+```
